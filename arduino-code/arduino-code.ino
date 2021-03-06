@@ -26,16 +26,19 @@ void setup() {
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);
   analogWrite(en, 100);
-
 }
 
 void loop() {
   if(!digitalRead(stop_btn)){                // If direction button is pressed
     while(!digitalRead(stop_btn));           // Wait until direction button released
     motor_dir = !motor_dir;                // Toggle direction variable
-    if(motor_dir)
-      digitalWrite(in2, LOW);
-    else
-      digitalWrite(in1, LOW);
+    if(motor_dir){
+        digitalWrite(in1, LOW);
+        digitalWrite(in2, HIGH);
+    }
+    else {
+      digitalWrite(in1, HIGH);
+      digitalWrite(in2, LOW); 
+    }
   }
 }
