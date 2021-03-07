@@ -1,5 +1,4 @@
 #include <Stepper.h>
-
 #define SPEED_CHANGE_VALUE 1
 #define STEPS 36
 
@@ -21,32 +20,26 @@ void setup()
   pinMode(v_dec_btn, INPUT_PULLUP);
   pinMode(chdir_btn, INPUT_PULLUP);
 }
- 
+
 int direction_ = 1, speed_ = 0;
  
 void loop()
 {
-  if ( digitalRead(chdir_btn) == 0 )  // if button is pressed
-    if ( debounce() )  // debounce button signal
-    {
-      direction_ *= -1;  // reverse direction variable
-      while ( debounce() );
-    }
+  if(!digitalRead(chdir_btn)) {
+    while(!digitalRead(chdir_btn));
+    direction_ *= -1;
+  }
+  
+  control_pause();
   control_speed();
-  if ( speed_ != motor_speed )
-  {
+  if ( speed_ != motor_speed ) {
     speed_ = motor_speed;
     stepper.setSpeed(speed_);
   }
-//  stepper.step(direction_ * (STEPS / 100));
-  if(!is_paused) {
-    stepper.step(direction_);
-  }
-  
+  if(!is_paused)  stepper.step(direction_);
 }
 
 void control_speed(){
-  control_pause();
   if(!digitalRead(v_inc_btn)){
     while(!digitalRead(v_inc_btn));
     motor_speed += SPEED_CHANGE_VALUE;
@@ -57,17 +50,6 @@ void control_speed(){
     motor_speed -= SPEED_CHANGE_VALUE;
     if(motor_speed < 0) motor_speed = 0;
   }
-}
-
-bool debounce() {
-  byte count = 0;
-  for(byte i = 0; i < 5; i++) {
-    if (digitalRead(chdir_btn) == 0)
-      count++;
-    delay(10);
-  }
-  if(count > 2)  return 1;
-  else           return 0;
 }
 
 void control_pause() {
