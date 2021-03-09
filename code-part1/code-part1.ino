@@ -11,6 +11,7 @@ int v_inc_btn = 1;
 int v_dec_btn = 2;
 int chdir_btn = 3;
 
+boolean motor_dir = 0;
 int current_pwm = MAX_PWM;
 int is_paused = 0;
 
